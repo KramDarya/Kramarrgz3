@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block rgz %}Расчетно-графическая работа{% endblock %}
+
+{% block main %}
+    <h1 class="sotr">Сотрудники</h1>
+    <ul>
+        {% for name in names %}
+            <li>{{ name }}</li>
+        {% endfor %}
+    </ul>
+    <h2>Выбранные ячейки</h2>
+    <ul>
+        {% for week in selected_weeks %}
+            <li>{{ week }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

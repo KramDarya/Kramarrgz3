@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block rgz %} Расчетно-графическая работа {% endblock %}
+
+{% block main %}
+    <h2>Имя сотрудника {{ visibleUser }}</h2>
+    <h2>Выбранные ячейки: {{ selected_cells }}</h2>
+
+    <div class="nazad">
+        <form action="/rgz/glavn">
+            <button class="b1">Назад</button>
+        </form>
+    </div>
+{% endblock %}
+
+
+
+
+

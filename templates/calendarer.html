@@ -1,0 +1,156 @@
+{% extends "base.html" %} 
+ 
+{% block rgz %}Расчетно-графическая работа{% endblock %} 
+ 
+{% block main %} 
+ 
+<select id="yearSelector" onchange="updateTable()"> 
+    {% for year in range(2023, 2014, -1) %} 
+        <option value="{{ year }}">{{ year }}</option> 
+    {% endfor %} 
+</select> 
+<style> 
+    .table { 
+        width: 500px; 
+        height: 100px; 
+        margin-bottom: -10px; 
+        border: 15px solid #e3e3e3; 
+        border-collapse: collapse; 
+        margin-top: -150px; 
+        margin-left: 300px; 
+} 
+.table th { 
+        font-weight: bold; 
+        padding: 15px; 
+        background: #e3e3e3; 
+} 
+.table td { 
+        padding: 5px; 
+        border: none; 
+        border-bottom: 5px solid #e3e3e3; 
+        text-align: center; 
+     
+} 
+ 
+.selected { 
+    background-color: #525252; 
+} 
+ 
+.bb { 
+    margin-bottom: 500px; 
+    margin-left: 900px; 
+    position: fixed; 
+} 
+.cel { 
+    margin-bottom: 500px; 
+    margin-left: 1200px; 
+} 
+.nazad { 
+        margin-left: 0px; 
+        margin-top: 10px; 
+    } 
+.userMessage { 
+        color: rgb(97, 97, 97); 
+        font-size: 15px; 
+        margin-left: 1000px; 
+        margin-top: -50px; 
+        position: fixed; 
+    /* Другие свойства */ 
+} 
+#userInfo { 
+    margin-top: -50px; /* Отступ сверху */ 
+    margin-left: 1000px; 
+} 
+
+.b3 {
+    margin-bottom: 15px;
+}
+ 
+</style> 
+<div class="nazad"> 
+    <form action="/rgz/glavn"> 
+        <button class="b3">Назад</button> 
+    </form> 
+</div> 
+
+<div class="dmenu">
+    <form action="/rgz/delete_account"><button class="b3">Удалить аккаунт</button></form>
+</div>
+
+<div class="dmenu">
+    <form action="/rgz/vacations"><button class="b3">Посмотреть отпуска</button></form>
+</div>
+
+<div class="dmenu">
+    <form action="/rgz/all_vacations"><button class="b3">Отпуска всех сотрудников</button></form>
+</div>
+ 
+<div id="userInfo"></div> 
+ 
+<div class="bb"> 
+    <button onclick="showSelection()">Отметить</button> 
+</div> 
+ 
+<form method="POST" action="/rgz/save_selection"> 
+    <input type="hidden" name="selected_cells" id="selectedCellsInput" value=""> 
+    <table class="table" id="weekTable"> 
+        <tr> 
+            <th>Номер недели</th> 
+            <th>Начало недели</th> 
+            <th>Конец недели</th> 
+        </tr> 
+        {% for week in week_data %} 
+            <tr> 
+                <td class="tdd {% if week.number in selected_cells %}selected{% endif %}" onclick="changeColor(this)" 
+                    tabindex="0">{{ week.number }}</td> 
+                <td>{{ week.start_of_week }}</td> 
+                <td>{{ week.end_of_week }}</td> 
+            </tr> 
+        {% endfor %} 
+    </table> 
+</form> 
+ 
+<script> 
+    var selected_cells = []; 
+ 
+    function updateTable() { 
+        var yearSelector = document.getElementById('yearSelector'); 
+        var selectedYear = parseInt(yearSelector.value); 
+        var currentYear = new Date().getFullYear(); 
+ 
+        if (selectedYear < currentYear) { 
+            document.getElementById('weekTable').style.pointerEvents = 'none'; 
+        } else { 
+            document.getElementById('weekTable').style.pointerEvents = 'auto'; 
+        } 
+    } 
+ 
+    function changeColor(cell) {
+    if (cell.classList.contains('tdd')) {
+        if (selected_cells.length < 4) {
+            cell.classList.toggle('selected');
+            updateSelectedCellsInput();
+        } else {
+            alert('Отметь еще ячейки');
+        }
+    }
+}
+
+    function updateSelectedCellsInput() { 
+        var selectedCells = document.getElementsByClassName('tdd selected'); 
+        selected_cells = Array.from(selectedCells).map(function (cell) { 
+            return cell.textContent; 
+        }); 
+        document.getElementById('selectedCellsInput').value = selected_cells.join(","); 
+    } 
+ 
+    function showSelection() { 
+        var selectedWeeks = document.getElementById('selectedCellsInput').value; 
+        var username = "{{ username }}"; 
+ 
+        var userInfoDiv = document.getElementById('userInfo'); 
+        userInfoDiv.innerHTML = 'Отметил(а) пользователь ' + username + ': выбранные дни - ' + selectedWeeks; 
+    } 
+</script> 
+ 
+{% endblock %}
