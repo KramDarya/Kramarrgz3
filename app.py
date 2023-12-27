@@ -31,7 +31,3 @@ def load_users(user_id):
     return Users.query.get(int(user_id))
 
 app.register_blueprint(rgz)
-
-@app.route("/")
-def main():
-    return render_template('rgz.html')
