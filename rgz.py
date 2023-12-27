@@ -9,7 +9,7 @@ from datetime import date, timedelta
 
 rgz = Blueprint("rgz", __name__)
 
-@rgz.route("/rgz/")
+@rgz.route("/")
 def main():
     return render_template('rgz.html')
 
