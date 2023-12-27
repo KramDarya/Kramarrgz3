@@ -1,6 +1,7 @@
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask import redirect, render_template, request, Blueprint
 from Db import db
+import re
 from Db.models import Users, Vacation
 from flask_login import login_user, login_required, current_user, logout_user
 import psycopg2
